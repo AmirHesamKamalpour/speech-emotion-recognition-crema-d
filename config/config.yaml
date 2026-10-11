@@ -1,0 +1,126 @@
+project:
+  name: crema_d_speech_emotion_recognition
+
+dataset:
+  root: data/dataset/AudioWAV
+  extension: .wav
+  recursive: false
+  filename:
+    separator: "_"
+    speaker_index: 0
+    emotion_index: 2
+  emotion_codes:
+    NEU: neutral
+    HAP: happy
+    SAD: sad
+    ANG: angry
+  label_order:
+    - neutral
+    - happy
+    - sad
+    - angry
+  speakers:
+    ids: null
+    start: 1001
+    end: 1020
+
+audio:
+  sample_rate: 16000
+  duration_seconds: 3.0
+  crop_mode: center
+  pad_mode: constant
+
+features:
+  # Select exactly one pipeline: mel or hubert.
+  method: mel
+  cache:
+    enabled: true
+    precompute: true
+    directory: data/feature_cache
+  mel:
+    n_fft: 512
+    win_length: 400
+    hop_length: 160
+    n_mels: 80
+    f_min: 20.0
+    f_max: 8000.0
+    pad: 0
+    power: 2.0
+    normalized: false
+    center: true
+    pad_mode: reflect
+    mel_norm: null
+    mel_scale: htk
+    top_db: 80.0
+    standardize: false
+    standardize_epsilon: 1.0e-6
+  hubert:
+    torchaudio_bundle: HUBERT_BASE
+    embedding_dim: 768
+    pooling: mean
+    device: auto
+    feature_size: 1
+    padding_value: 0.0
+    do_normalize: true
+
+split:
+  train_size: 0.80
+  validation_size: 0.10
+  test_size: 0.10
+
+model:
+  mel_cnn:
+    input_channels: 1
+    channels: [32, 64, 128]
+    kernel_sizes: [3, 3, 3]
+    pool_sizes:
+      - [2, 2]
+      - [2, 2]
+      - [2, 1]
+    batch_norm: true
+    adaptive_pool_output: [2, 8]
+    dropout: 0.10
+    classifier_dropout: 0.20
+    classifier_hidden_dim: 256
+  hubert_mlp:
+    # One hidden MLP layer, followed by the output layer.
+    hidden_dims: [256]
+    batch_norm: true
+    dropout: 0.30
+
+training:
+  device: auto
+  batch_size: 32
+  epochs: 100
+  learning_rate: 0.0003
+  num_workers: 0
+  pin_memory: true
+  persistent_workers: false
+  drop_last: false
+  gradient_clip_norm: 5.0
+  optimizer:
+    name: Adam
+    weight_decay: 0.0005
+  loss:
+    name: cross_entropy
+    label_smoothing: 0.0
+  scheduler:
+    enabled: true
+    name: ReduceLROnPlateau
+    mode: min
+    factor: 0.5
+    patience: 2
+  early_stopping:
+    patience: 10
+  checkpoint_dir: models/saved_models
+
+reproducibility:
+  seed: 42
+  deterministic: true
+
+output:
+  directory: outputs
+
+logging:
+  config_file: config/logging.yaml
+  log_filename: experiment.log

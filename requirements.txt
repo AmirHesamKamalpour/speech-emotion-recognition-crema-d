@@ -1,0 +1,10 @@
+# Unpinned because exact historical environment versions were not recorded.
+# For GPU acceleration, select compatible torch/torchaudio wheels from pytorch.org.
+torch
+torchaudio
+transformers
+numpy
+scikit-learn
+matplotlib
+PyYAML
+tqdm
