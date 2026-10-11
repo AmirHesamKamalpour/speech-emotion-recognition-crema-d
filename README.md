@@ -232,16 +232,6 @@ The loader seeds Python, NumPy, and PyTorch; employs deterministic-algorithm set
 └── README.md
 ```
 
-## Limitations and next steps
-
-- **Speaker overlap:** Use actor-disjoint train/validation/test partitions (e.g., grouped splits or speaker-wise cross-validation) to evaluate generalization to unseen voices.
-- **Limited scale:** This study covers four emotions and 20 of the dataset's 91 actors; expand to all six emotions and more actors for broader coverage.
-- **Single run:** Repeat each condition across multiple seeds and report dispersion or confidence intervals rather than treating a single held-out score as conclusive.
-- **Not a feature-only ablation:** Architectures and regularization settings differ across the two pipelines. Match downstream model capacity and tune under an explicit validation budget before attributing the gap solely to representation quality.
-- **Pooling and domain shift:** Compare masked/attention pooling, alternative HuBERT layers, trainable fine-tuning, and cross-dataset evaluation; inspect sensitivity to zero padding and spoken content.
-
-This repository is an **experimental comparison and reproducible implementation**, not a claim of state-of-the-art performance or a new speech representation model.
-
 ## References and acknowledgments
 
 1. **CREMA-D:** Cao, H., Cooper, D. G., Keutmann, M. K., Gur, R. C., Nenkova, A., & Verma, R. (2014). *CREMA-D: Crowd-sourced Emotional Multimodal Actors Dataset.* IEEE Transactions on Affective Computing, 5(4), 377–390. [DOI: 10.1109/TAFFC.2014.2336244](https://doi.org/10.1109/TAFFC.2014.2336244).
